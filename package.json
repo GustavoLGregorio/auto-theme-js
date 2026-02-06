@@ -1,0 +1,33 @@
+{
+    "name": "auto-theme-js",
+    "version": "1.0.0",
+    "description": "",
+    "license": "MIT",
+    "author": "Gustavo L. Gregorio",
+    "main": "dist/AutoTheme.js",
+    "scripts": {
+        "build:lin": "clear; tsc; npx ts-add-js-extension --dir=dist",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "homepage": "https://github.com/GustavoLGregorio/auto-theme-js#readme",
+    "bugs": {
+        "url": "https://github.com/GustavoLGregorio/auto-theme-js/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GustavoLGregorio/auto-theme-js.git"
+    },
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/AutoTheme.js",
+            "types": "./dist/AutoTheme.d.ts"
+        },
+        "./types": {
+            "types": "./dist/types.d.ts"
+        }
+    },
+    "dependencies": {
+        "ts-add-js-extension": "^1.6.6"
+    }
+}

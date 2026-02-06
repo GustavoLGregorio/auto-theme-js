@@ -1,0 +1,9 @@
+# dev
+.prettierrc
+tsconfig.json
+/src
+
+# tests
+index.html
+app.js
+*.tgz
