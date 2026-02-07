@@ -1,3 +1,4 @@
+// #region helpers
 export class AutoTheme {
     colorType;
     baseColor;

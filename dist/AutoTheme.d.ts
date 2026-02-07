@@ -1,16 +1,19 @@
+type Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
 type ColorTypes = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
 type ColorHEX = `#${string}`;
 type ColorRGB = `rgba(${number}, ${number}, ${number}, ${number})`;
 type ColorHSL = `hsla(${number}, ${number}%, ${number}%, ${number})`;
 type ColorOKLAB = `oklab(${number}% ${number} ${number} / ${number})`;
 type ColorOKLCH = `oklch(${number}% ${number} ${number}deg / ${number})`;
-type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
-type ThemeProperties = "primary" | "secondary" | "tertiary" | "accent" | "neutral";
-type Shades = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+export type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
+export type ThemeProperties = "primary" | "secondary" | "tertiary" | "accent" | "neutral";
+export type Shades = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
 type ShadeSpaces = Partial<Record<Shades, Shades>>;
 type ShadeProperties = `${ThemeProperties}-${Shades}`;
 type ThemeShades = Partial<Record<ShadeProperties, Color>>;
-type Theme = Record<Shades, ThemeShades> & {
+export type Theme = Record<Shades, Prettify<ThemeShades>> & {
     colorType: ColorTypes;
     baseColor: Color;
 };
