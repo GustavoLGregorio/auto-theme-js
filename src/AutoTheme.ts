@@ -1,3 +1,11 @@
+// #region helpers
+
+type Prettify<T> = {
+    [K in keyof T]: T[K];
+} & {};
+
+// #endregion helpers
+
 // Color types/patterns
 type ColorTypes = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
 
@@ -7,7 +15,7 @@ type ColorHSL = `hsla(${number}, ${number}%, ${number}%, ${number})`;
 type ColorOKLAB = `oklab(${number}% ${number} ${number} / ${number})`;
 type ColorOKLCH = `oklch(${number}% ${number} ${number}deg / ${number})`;
 
-type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
+export type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
 
 // Internal OKLCH representation for manipulation
 interface OKLCHColor {
@@ -27,7 +35,7 @@ type ThemeGroups =
     | "square"
     | "compound"
     | "shades";
-type ThemeProperties =
+export type ThemeProperties =
     | "primary"
     | "secondary"
     | "tertiary"
@@ -35,7 +43,7 @@ type ThemeProperties =
     | "neutral";
 
 // Shading types
-type Shades =
+export type Shades =
     | "50"
     | "100"
     | "200"
@@ -50,7 +58,7 @@ type ShadeSpaces = Partial<Record<Shades, Shades>>;
 type ShadeProperties = `${ThemeProperties}-${Shades}`;
 type ThemeShades = Partial<Record<ShadeProperties, Color>>;
 
-type Theme = Record<Shades, ThemeShades> & {
+export type Theme = Record<Shades, Prettify<ThemeShades>> & {
     colorType: ColorTypes;
     baseColor: Color;
 };
