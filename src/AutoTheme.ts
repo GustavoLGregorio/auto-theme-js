@@ -485,6 +485,12 @@ export class AutoTheme implements Theme {
     // #endregion color_conversion
 
     // #region serialization
+    /**
+     * A static method to create custom serialized strings containing the theme
+     * @param autoThemeObject The object that will be serialized
+     * @param escapeChar An optional custom escape character (needs to be used the same in de deserialization method). Use with caution. Defaults to "|"
+     * @returns A string containing a theme. Single escape character indicates simple properties, double escape characters indicates objects
+     */
     static serialize(autoThemeObject: AutoTheme, escapeChar = "|") {
         if (!(autoThemeObject instanceof AutoTheme))
             throw new Error("Object is not a AutoTheme instance");
@@ -529,6 +535,12 @@ export class AutoTheme implements Theme {
         return serialized.trim();
     }
 
+    /**
+     * A static method to deserialize a previously serialized theme object
+     * @param serializedTheme The serialized object string that will be deserialized
+     * @param escapeChar An optional escape character that is expected after using a specific escape character during the serialization process. Defaults to "|"
+     * @returns A theme object ready to be used
+     */
     static deserialize(serializedTheme: string, escapeChar: string = "|") {
         if (!serializedTheme)
             throw new Error("Serialized Theme was not passed as a parameter");
