@@ -56,6 +56,7 @@ type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
 
 /** A type for the object theme. When deserialized, this is the object type that is returned */
 export type Theme = Partial<ThemePropertiesShades> & {
+    version: string;
     colorType: ColorType;
     baseColor: Color;
 };
@@ -64,6 +65,7 @@ export type Theme = Partial<ThemePropertiesShades> & {
  * color conversion, custom serialization and deserialization.
  */
 export class AutoTheme implements Theme {
+    version = "V1";
     colorType;
     baseColor;
 
