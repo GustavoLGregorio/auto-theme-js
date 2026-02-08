@@ -9,11 +9,12 @@ export type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
 /** Object color properties */
 export type ThemeProperties = "primary" | "secondary" | "tertiary" | "accent" | "neutral";
 /** Shading values. 50 is the brighthest and 900 the darkest */
-export type Shades = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950";
-type ShadeColor = Partial<Record<Shades, Color>>;
+export type Shade = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950";
+type ShadeColor = Partial<Record<Shade, Color>>;
 type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
 /** A type for the object theme. When deserialized, this is the object type that is returned */
 export type Theme = Partial<ThemePropertiesShades> & {
+    version: string;
     colorType: ColorType;
     baseColor: Color;
 };
@@ -22,6 +23,7 @@ export type Theme = Partial<ThemePropertiesShades> & {
  */
 export declare class AutoTheme implements Theme {
     #private;
+    version: string;
     colorType: ColorType;
     baseColor: Color;
     primary: {};
@@ -36,7 +38,7 @@ export declare class AutoTheme implements Theme {
      * @param minShade The minimum value on the shade range (50 is the brighthest)
      * @param maxShade The maximum value on the shade range (950 is the darkest)
      */
-    constructor(color: Color, inputType?: ColorType, outputType?: ColorType, minShade?: Shades, maxShade?: Shades);
+    constructor(color: Color, inputType?: ColorType, outputType?: ColorType, minShade?: Shade, maxShade?: Shade);
     /**
      * A static method to create custom serialized strings containing the theme
      * @param autoThemeObject The object that will be serialized
