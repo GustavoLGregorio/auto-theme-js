@@ -1,7 +1,7 @@
 {
     "name": "auto-theme-js",
     "version": "1.0.1",
-    "description": "",
+    "description": "Generate beautiful, harmonious color palettes from a single base color. Create complete design system color schemes with primary, secondary, tertiary, accent, and neutral variants across 11 shade levels.",
     "license": "MIT",
     "author": "Gustavo L. Gregorio",
     "main": "dist/AutoTheme.js",
@@ -9,6 +9,31 @@
         "build:lin": "clear; tsc; npx ts-add-js-extension --dir=dist",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "keywords": [
+        "color",
+        "colors",
+        "palette",
+        "theme",
+        "theming",
+        "color-palette",
+        "color-scheme",
+        "design-system",
+        "tailwind",
+        "css",
+        "hex",
+        "rgb",
+        "hsl",
+        "oklch",
+        "oklab",
+        "color-harmony",
+        "complementary",
+        "analogous",
+        "generator",
+        "ui",
+        "design",
+        "frontend",
+        "typescript"
+    ],
     "homepage": "https://github.com/GustavoLGregorio/auto-theme-js#readme",
     "bugs": {
         "url": "https://github.com/GustavoLGregorio/auto-theme-js/issues"
