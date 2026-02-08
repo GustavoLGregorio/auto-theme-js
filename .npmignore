@@ -1,9 +1,12 @@
 # dev
 .prettierrc
 tsconfig.json
-/src
+src/
 
 # tests
 index.html
 app.js
 *.tgz
+
+# demo / preview / landing page
+demo/
