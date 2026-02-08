@@ -1,4 +1,4 @@
-import { AutoTheme } from "../dist/AutoTheme.js";
+import { AutoTheme } from "./lib/auto-theme-js/AutoTheme.js";
 
 const input_theme_base = document.getElementById("theme_base");
 const colorValue = document.getElementById("color_value");
