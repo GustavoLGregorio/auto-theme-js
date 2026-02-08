@@ -1,4 +1,6 @@
-// #region helpers
+/** A class that creates themes using a single color input and handles operations such as:
+ * color conversion, custom serialization and deserialization.
+ */
 export class AutoTheme {
     colorType;
     baseColor;
@@ -7,12 +9,18 @@ export class AutoTheme {
     tertiary = {};
     accent = {};
     neutral = {};
-    constructor(color, inputType = "hex", outputType = "hex") {
+    /**
+     * @param color The base color used to create the theme
+     * @param inputType The input type of the base color
+     * @param outputType The ouput of the color properties and serialization
+     * @param minShade The minimum value on the shade range (50 is the brighthest)
+     * @param maxShade The maximum value on the shade range (950 is the darkest)
+     */
+    constructor(color, inputType = "hex", outputType = "hex", minShade = "50", maxShade = "900") {
         this.colorType = outputType;
-        // Convert baseColor to the selected output type
         const parsedColor = AutoTheme.#parseToOKLCH(color, inputType);
         this.baseColor = AutoTheme.#oklchToColor(parsedColor, outputType);
-        this.#addColors(color, inputType, "50", "900");
+        this.#addColors(color, inputType, minShade, maxShade);
     }
     #addColors(color, inputType, shadeMin, shadeMax) {
         const keys = [
@@ -33,6 +41,7 @@ export class AutoTheme {
             "700",
             "800",
             "900",
+            "950",
         ];
         // Parse base color to OKLCH using the input type
         const baseOKLCH = AutoTheme.#parseToOKLCH(color, inputType);
@@ -50,7 +59,7 @@ export class AutoTheme {
             neutral: 0,
         };
         // Lightness mapping for shades (Tailwind-like distribution)
-        // 50 = very light, 500 = base, 900 = very dark
+        // 50 = very light, 500 = base, 950 = very dark
         const lightnessMap = {
             "50": 97,
             "100": 94,
@@ -62,6 +71,7 @@ export class AutoTheme {
             "700": 35,
             "800": 25,
             "900": 15,
+            "950": 8,
         };
         // Filter shades within range
         const minIndex = shades.indexOf(shadeMin);
@@ -239,7 +249,7 @@ export class AutoTheme {
     static #oklchToColor(oklch, outputType) {
         switch (outputType) {
             case "oklch":
-                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)}deg / ${oklch.a})`;
+                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)} /${oklch.a})`;
             case "hex":
                 return AutoTheme.#oklchToHex(oklch);
             case "rgb":
@@ -318,8 +328,13 @@ export class AutoTheme {
         return `oklab(${oklch.l.toFixed(1)}% ${a.toFixed(3)} ${b.toFixed(3)} / ${oklch.a})`;
     }
     // #endregion color_conversion
-    // ...existing code for serialize, deserialize...
     // #region serialization
+    /**
+     * A static method to create custom serialized strings containing the theme
+     * @param autoThemeObject The object that will be serialized
+     * @param escapeChar An optional custom escape character (needs to be used the same in de deserialization method). Use with caution. Defaults to "|"
+     * @returns A string containing a theme. Single escape character indicates simple properties, double escape characters indicates objects
+     */
     static serialize(autoThemeObject, escapeChar = "|") {
         if (!(autoThemeObject instanceof AutoTheme))
             throw new Error("Object is not a AutoTheme instance");
@@ -351,6 +366,12 @@ export class AutoTheme {
             serialized = serialized.substring(0, serialized.length - 1);
         return serialized.trim();
     }
+    /**
+     * A static method to deserialize a previously serialized theme object
+     * @param serializedTheme The serialized object string that will be deserialized
+     * @param escapeChar An optional escape character that is expected after using a specific escape character during the serialization process. Defaults to "|"
+     * @returns A theme object ready to be used
+     */
     static deserialize(serializedTheme, escapeChar = "|") {
         if (!serializedTheme)
             throw new Error("Serialized Theme was not passed as a parameter");
@@ -383,26 +404,6 @@ export class AutoTheme {
     }
     // #endregion serialization
     // #region private_methods
-    static #addColorGroups(theme) {
-        const groups = [
-            "analogous",
-            "monochromatic",
-            "triad",
-            "complementary",
-            "splitComplementary",
-            "square",
-            "compound",
-            "shades",
-        ];
-        for (const group of groups) {
-            Object.defineProperty(theme, group, {
-                value: {},
-                writable: true,
-                enumerable: true,
-                configurable: true,
-            });
-        }
-    }
     static #addColorProperty(theme, key, value) {
         Object.defineProperty(theme, key, {
             value: value,
@@ -418,10 +419,5 @@ export class AutoTheme {
             enumerable: true,
             writable: true,
         });
-    }
-    static #forPropColorArrays(themeProp, keys, colors) {
-        for (let i = 0; i < keys.length; ++i) {
-            AutoTheme.#addColorProperty(themeProp, keys[i], colors[i]);
-        }
     }
 }
