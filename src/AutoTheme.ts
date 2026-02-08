@@ -65,7 +65,9 @@ export type Theme = Partial<ThemePropertiesShades> & {
  * color conversion, custom serialization and deserialization.
  */
 export class AutoTheme implements Theme {
-    version = "V1";
+    static VERSION = "V1";
+    
+    version = AutoTheme.VERSION;
     colorType;
     baseColor;
 

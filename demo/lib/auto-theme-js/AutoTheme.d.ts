@@ -23,6 +23,7 @@ export type Theme = Partial<ThemePropertiesShades> & {
  */
 export declare class AutoTheme implements Theme {
     #private;
+    static VERSION: string;
     version: string;
     colorType: ColorType;
     baseColor: Color;

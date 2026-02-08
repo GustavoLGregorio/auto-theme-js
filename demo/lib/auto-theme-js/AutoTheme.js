@@ -2,7 +2,8 @@
  * color conversion, custom serialization and deserialization.
  */
 export class AutoTheme {
-    version = "V1";
+    static VERSION = "V1";
+    version = AutoTheme.VERSION;
     colorType;
     baseColor;
     primary = {};
