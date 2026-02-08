@@ -38,7 +38,7 @@ export type ThemeProperties =
     | "neutral";
 
 /** Shading values. 50 is the brighthest and 900 the darkest */
-export type Shades =
+export type Shade =
     | "50"
     | "100"
     | "200"
@@ -51,7 +51,7 @@ export type Shades =
     | "900"
     | "950";
 
-type ShadeColor = Partial<Record<Shades, Color>>;
+type ShadeColor = Partial<Record<Shade, Color>>;
 type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
 
 /** A type for the object theme. When deserialized, this is the object type that is returned */
@@ -84,7 +84,7 @@ export class AutoTheme implements Theme {
         color: Color,
         inputType: ColorType = "hex",
         outputType: ColorType = "hex",
-        minShade: Shades = "50", maxShade: Shades = "900"
+        minShade: Shade = "50", maxShade: Shade = "900"
     ) {
         this.colorType = outputType;
 
@@ -94,7 +94,7 @@ export class AutoTheme implements Theme {
         this.#addColors(color, inputType, minShade, maxShade);
     }
 
-    #addColors(color: Color, inputType: ColorType, shadeMin: Shades, shadeMax: Shades) {
+    #addColors(color: Color, inputType: ColorType, shadeMin: Shade, shadeMax: Shade) {
         const keys: ThemeProperties[] = [
             "primary",
             "secondary",
@@ -102,7 +102,7 @@ export class AutoTheme implements Theme {
             "accent",
             "neutral",
         ];
-        const shades: Shades[] = [
+        const shades: Shade[] = [
             "50",
             "100",
             "200",
@@ -135,7 +135,7 @@ export class AutoTheme implements Theme {
 
         // Lightness mapping for shades (Tailwind-like distribution)
         // 50 = very light, 500 = base, 950 = very dark
-        const lightnessMap: Record<Shades, number> = {
+        const lightnessMap: Record<Shade, number> = {
             "50": 97,
             "100": 94,
             "200": 86,
@@ -184,7 +184,7 @@ export class AutoTheme implements Theme {
                     shadeColor,
                     this.colorType,
                 );
-                const shadeKey = `${shade}` satisfies Shades;
+                const shadeKey = `${shade}` satisfies Shade;
 
                 AutoTheme.#addColorProperty(this[key], shadeKey, colorValue);
             }
