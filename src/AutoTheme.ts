@@ -1,13 +1,5 @@
-// #region helpers
-
-type Prettify<T> = {
-    [K in keyof T]: T[K];
-} & {};
-
-// #endregion helpers
-
 // Color types/patterns
-type ColorTypes = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
+type ColorType = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
 
 type ColorHEX = `#${string}`;
 type ColorRGB = `rgba(${number}, ${number}, ${number}, ${number})`;
@@ -15,14 +7,15 @@ type ColorHSL = `hsla(${number}, ${number}%, ${number}%, ${number})`;
 type ColorOKLAB = `oklab(${number}% ${number} ${number} / ${number})`;
 type ColorOKLCH = `oklch(${number}% ${number} ${number}deg / ${number})`;
 
+/** A type for CSS-based color patterns */
 export type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
 
-// Internal OKLCH representation for manipulation
+// Internal manipulation only
 interface OKLCHColor {
-    l: number; // Lightness 0-100%
-    c: number; // Chroma 0-0.4+
-    h: number; // Hue 0-360deg
-    a: number; // Alpha 0-1
+    l: number;
+    c: number;
+    h: number;
+    a: number;
 }
 
 // Design Systems common properties/theme names
@@ -35,6 +28,8 @@ type ThemeGroups =
     | "square"
     | "compound"
     | "shades";
+
+/** Object color properties */
 export type ThemeProperties =
     | "primary"
     | "secondary"
@@ -42,7 +37,7 @@ export type ThemeProperties =
     | "accent"
     | "neutral";
 
-// Shading types
+/** Shading values. 50 is the brighthest and 900 the darkest */
 export type Shades =
     | "50"
     | "100"
@@ -53,39 +48,53 @@ export type Shades =
     | "600"
     | "700"
     | "800"
-    | "900";
-type ShadeSpaces = Partial<Record<Shades, Shades>>;
-type ShadeProperties = `${ThemeProperties}-${Shades}`;
-type ThemeShades = Partial<Record<ShadeProperties, Color>>;
+    | "900"
+    | "950";
 
-export type Theme = Record<Shades, Prettify<ThemeShades>> & {
-    colorType: ColorTypes;
+type ShadeColor = Partial<Record<Shades, Color>>;
+type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
+
+/** A type for the object theme. When deserialized, this is the object type that is returned */
+export type Theme = Partial<ThemePropertiesShades> & {
+    colorType: ColorType;
     baseColor: Color;
 };
 
-type ThemeGroup = ThemeGroups;
+/** A class that creates themes using a single color input and handles operations such as:
+ * color conversion, custom serialization and deserialization.
+ */
+export class AutoTheme implements Theme {
+    colorType;
+    baseColor;
 
-export class AutoTheme {
-    colorType: ColorTypes;
-    baseColor: Color;
+    primary = {};
+    secondary = {};
+    tertiary = {};
+    accent = {};
+    neutral = {};
 
-    primary: ShadeSpaces = {};
-    secondary: ShadeSpaces = {};
-    tertiary: ShadeSpaces = {};
-    accent: ShadeSpaces = {};
-    neutral: ShadeSpaces = {};
-
-    constructor(color: Color, inputType: ColorTypes = "hex", outputType: ColorTypes = "hex") {
+    /**
+     * @param color The base color used to create the theme
+     * @param inputType The input type of the base color
+     * @param outputType The ouput of the color properties and serialization
+     * @param minShade The minimum value on the shade range (50 is the brighthest)
+     * @param maxShade The maximum value on the shade range (950 is the darkest)
+     */
+    constructor(
+        color: Color,
+        inputType: ColorType = "hex",
+        outputType: ColorType = "hex",
+        minShade: Shades = "50", maxShade: Shades = "900"
+    ) {
         this.colorType = outputType;
 
-        // Convert baseColor to the selected output type
         const parsedColor = AutoTheme.#parseToOKLCH(color, inputType);
         this.baseColor = AutoTheme.#oklchToColor(parsedColor, outputType);
 
-        this.#addColors(color, inputType, "50", "900");
+        this.#addColors(color, inputType, minShade, maxShade);
     }
 
-    #addColors(color: Color, inputType: ColorTypes, shadeMin: Shades, shadeMax: Shades) {
+    #addColors(color: Color, inputType: ColorType, shadeMin: Shades, shadeMax: Shades) {
         const keys: ThemeProperties[] = [
             "primary",
             "secondary",
@@ -104,6 +113,7 @@ export class AutoTheme {
             "700",
             "800",
             "900",
+            "950",
         ];
 
         // Parse base color to OKLCH using the input type
@@ -124,7 +134,7 @@ export class AutoTheme {
         };
 
         // Lightness mapping for shades (Tailwind-like distribution)
-        // 50 = very light, 500 = base, 900 = very dark
+        // 50 = very light, 500 = base, 950 = very dark
         const lightnessMap: Record<Shades, number> = {
             "50": 97,
             "100": 94,
@@ -136,6 +146,7 @@ export class AutoTheme {
             "700": 35,
             "800": 25,
             "900": 15,
+            "950": 8,
         };
 
         // Filter shades within range
@@ -182,7 +193,7 @@ export class AutoTheme {
 
 
     // #region color_conversion
-    static #parseToOKLCH(color: Color, type: ColorTypes): OKLCHColor {
+    static #parseToOKLCH(color: Color, type: ColorType): OKLCHColor {
         switch (type) {
             case "hex":
                 return AutoTheme.#hexToOKLCH(color as ColorHEX);
@@ -365,10 +376,10 @@ export class AutoTheme {
         return baseChroma * Math.max(0.3, factor);
     }
 
-    static #oklchToColor(oklch: OKLCHColor, outputType: ColorTypes): Color {
+    static #oklchToColor(oklch: OKLCHColor, outputType: ColorType): Color {
         switch (outputType) {
             case "oklch":
-                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)}deg / ${oklch.a})` as ColorOKLCH;
+                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)} /${oklch.a})` as ColorOKLCH;
             case "hex":
                 return AutoTheme.#oklchToHex(oklch);
             case "rgb":
@@ -473,8 +484,6 @@ export class AutoTheme {
     }
     // #endregion color_conversion
 
-    // ...existing code for serialize, deserialize...
-
     // #region serialization
     static serialize(autoThemeObject: AutoTheme, escapeChar = "|") {
         if (!(autoThemeObject instanceof AutoTheme))
@@ -575,28 +584,6 @@ export class AutoTheme {
     // #endregion serialization
 
     // #region private_methods
-    static #addColorGroups(theme: AutoTheme) {
-        const groups: ThemeGroups[] = [
-            "analogous",
-            "monochromatic",
-            "triad",
-            "complementary",
-            "splitComplementary",
-            "square",
-            "compound",
-            "shades",
-        ];
-
-        for (const group of groups) {
-            Object.defineProperty(theme, group, {
-                value: {},
-                writable: true,
-                enumerable: true,
-                configurable: true,
-            });
-        }
-    }
-
     static #addColorProperty(theme: object, key: string, value: Color) {
         Object.defineProperty(theme, key, {
             value: value,
@@ -613,16 +600,6 @@ export class AutoTheme {
             enumerable: true,
             writable: true,
         });
-    }
-
-    static #forPropColorArrays(
-        themeProp: object,
-        keys: string[],
-        colors: Color[],
-    ) {
-        for (let i = 0; i < keys.length; ++i) {
-            AutoTheme.#addColorProperty(themeProp, keys[i], colors[i]);
-        }
     }
     // #endregion private_methods
 }
