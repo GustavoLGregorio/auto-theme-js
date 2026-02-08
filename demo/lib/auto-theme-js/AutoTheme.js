@@ -250,7 +250,7 @@ export class AutoTheme {
     static #oklchToColor(oklch, outputType) {
         switch (outputType) {
             case "oklch":
-                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)} /${oklch.a})`;
+                return `oklch(${oklch.l.toFixed(1)}% ${oklch.c.toFixed(3)} ${oklch.h.toFixed(1)}deg / ${oklch.a})`;
             case "hex":
                 return AutoTheme.#oklchToHex(oklch);
             case "rgb":
