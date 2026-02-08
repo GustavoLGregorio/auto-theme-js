@@ -3,5 +3,4 @@ node_modules/
 .prettierrc
 
 # demo
-index.html
-app.js
+*.tgz
