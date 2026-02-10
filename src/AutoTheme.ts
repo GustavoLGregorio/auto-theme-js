@@ -37,8 +37,9 @@ export type ThemeProperties =
     | "accent"
     | "neutral";
 
-/** Shading values. 50 is the brighthest and 900 the darkest */
+/** Shading values. 25 is the brightest and 975 the darkest */
 export type Shade =
+    | "25"
     | "50"
     | "100"
     | "200"
@@ -49,7 +50,8 @@ export type Shade =
     | "700"
     | "800"
     | "900"
-    | "950";
+    | "950"
+    | "975";
 
 type ShadeColor = Partial<Record<Shade, Color>>;
 type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
@@ -65,8 +67,8 @@ export type Theme = Partial<ThemePropertiesShades> & {
  * color conversion, custom serialization and deserialization.
  */
 export class AutoTheme implements Theme {
-    static VERSION = "V1";
-    
+    static VERSION = "V1.1";
+
     version = AutoTheme.VERSION;
     colorType;
     baseColor;
@@ -81,14 +83,14 @@ export class AutoTheme implements Theme {
      * @param color The base color used to create the theme
      * @param inputType The input type of the base color
      * @param outputType The ouput of the color properties and serialization
-     * @param minShade The minimum value on the shade range (50 is the brighthest)
-     * @param maxShade The maximum value on the shade range (950 is the darkest)
+     * @param minShade The minimum value on the shade range (25 is the brightest)
+     * @param maxShade The maximum value on the shade range (975 is the darkest)
      */
     constructor(
         color: Color,
         inputType: ColorType = "hex",
         outputType: ColorType = "hex",
-        minShade: Shade = "50", maxShade: Shade = "900"
+        minShade: Shade = "25", maxShade: Shade = "975"
     ) {
         this.colorType = outputType;
 
@@ -107,6 +109,7 @@ export class AutoTheme implements Theme {
             "neutral",
         ];
         const shades: Shade[] = [
+            "25",
             "50",
             "100",
             "200",
@@ -118,6 +121,7 @@ export class AutoTheme implements Theme {
             "800",
             "900",
             "950",
+            "975",
         ];
 
         // Parse base color to OKLCH using the input type
@@ -140,6 +144,7 @@ export class AutoTheme implements Theme {
         // Lightness mapping for shades (Tailwind-like distribution)
         // 50 = very light, 500 = base, 950 = very dark
         const lightnessMap: Record<Shade, number> = {
+            "25": 99,
             "50": 97,
             "100": 94,
             "200": 86,
@@ -151,6 +156,7 @@ export class AutoTheme implements Theme {
             "800": 25,
             "900": 15,
             "950": 8,
+            "975": 4,
         };
 
         // Filter shades within range

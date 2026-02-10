@@ -1,6 +1,6 @@
 {
     "name": "auto-theme-js",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "description": "Generate beautiful, harmonious color palettes from a single base color. Create complete design system color schemes with primary, secondary, tertiary, accent, and neutral variants across 11 shade levels.",
     "license": "MIT",
     "author": "Gustavo L. Gregorio",

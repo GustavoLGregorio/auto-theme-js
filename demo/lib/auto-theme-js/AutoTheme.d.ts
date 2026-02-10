@@ -1,4 +1,5 @@
-type ColorType = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
+/** Suported CSS color types */
+export type ColorType = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
 type ColorHEX = `#${string}`;
 type ColorRGB = `rgba(${number}, ${number}, ${number}, ${number})`;
 type ColorHSL = `hsla(${number}, ${number}%, ${number}%, ${number})`;
@@ -8,8 +9,8 @@ type ColorOKLCH = `oklch(${number}% ${number} ${number}deg / ${number})`;
 export type Color = ColorHEX | ColorRGB | ColorHSL | ColorOKLAB | ColorOKLCH;
 /** Object color properties */
 export type ThemeProperties = "primary" | "secondary" | "tertiary" | "accent" | "neutral";
-/** Shading values. 50 is the brighthest and 900 the darkest */
-export type Shade = "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950";
+/** Shading values. 25 is the brightest and 975 the darkest */
+export type Shade = "25" | "50" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900" | "950" | "975";
 type ShadeColor = Partial<Record<Shade, Color>>;
 type ThemePropertiesShades = Record<ThemeProperties, ShadeColor>;
 /** A type for the object theme. When deserialized, this is the object type that is returned */
@@ -36,8 +37,8 @@ export declare class AutoTheme implements Theme {
      * @param color The base color used to create the theme
      * @param inputType The input type of the base color
      * @param outputType The ouput of the color properties and serialization
-     * @param minShade The minimum value on the shade range (50 is the brighthest)
-     * @param maxShade The maximum value on the shade range (950 is the darkest)
+     * @param minShade The minimum value on the shade range (25 is the brightest)
+     * @param maxShade The maximum value on the shade range (975 is the darkest)
      */
     constructor(color: Color, inputType?: ColorType, outputType?: ColorType, minShade?: Shade, maxShade?: Shade);
     /**

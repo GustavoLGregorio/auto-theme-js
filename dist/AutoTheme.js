@@ -2,7 +2,7 @@
  * color conversion, custom serialization and deserialization.
  */
 export class AutoTheme {
-    static VERSION = "V1";
+    static VERSION = "V1.1";
     version = AutoTheme.VERSION;
     colorType;
     baseColor;
@@ -15,10 +15,10 @@ export class AutoTheme {
      * @param color The base color used to create the theme
      * @param inputType The input type of the base color
      * @param outputType The ouput of the color properties and serialization
-     * @param minShade The minimum value on the shade range (50 is the brighthest)
-     * @param maxShade The maximum value on the shade range (950 is the darkest)
+     * @param minShade The minimum value on the shade range (25 is the brightest)
+     * @param maxShade The maximum value on the shade range (975 is the darkest)
      */
-    constructor(color, inputType = "hex", outputType = "hex", minShade = "50", maxShade = "900") {
+    constructor(color, inputType = "hex", outputType = "hex", minShade = "25", maxShade = "975") {
         this.colorType = outputType;
         const parsedColor = AutoTheme.#parseToOKLCH(color, inputType);
         this.baseColor = AutoTheme.#oklchToColor(parsedColor, outputType);
@@ -33,6 +33,7 @@ export class AutoTheme {
             "neutral",
         ];
         const shades = [
+            "25",
             "50",
             "100",
             "200",
@@ -44,6 +45,7 @@ export class AutoTheme {
             "800",
             "900",
             "950",
+            "975",
         ];
         // Parse base color to OKLCH using the input type
         const baseOKLCH = AutoTheme.#parseToOKLCH(color, inputType);
@@ -63,6 +65,7 @@ export class AutoTheme {
         // Lightness mapping for shades (Tailwind-like distribution)
         // 50 = very light, 500 = base, 950 = very dark
         const lightnessMap = {
+            "25": 99,
             "50": 97,
             "100": 94,
             "200": 86,
@@ -74,6 +77,7 @@ export class AutoTheme {
             "800": 25,
             "900": 15,
             "950": 8,
+            "975": 4,
         };
         // Filter shades within range
         const minIndex = shades.indexOf(shadeMin);

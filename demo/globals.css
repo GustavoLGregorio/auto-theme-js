@@ -327,7 +327,7 @@ h1 {
 
 .shades {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 4px;
 }
 
@@ -444,7 +444,7 @@ h1 {
         gap: 1rem;
     }
     .shades {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(7, 1fr);
     }
 }
 
@@ -501,7 +501,7 @@ h1 {
         font-size: 0.7rem;
     }
     .shades {
-        grid-template-columns: repeat(11, 1fr);
+        grid-template-columns: repeat(13, 1fr);
         gap: 6px;
     }
     .box-color {
@@ -560,7 +560,7 @@ h1 {
     }
     .shade-header span {
         flex: 1;
-        max-width: 52px;
+        max-width: 48px;
         text-align: center;
         font-size: 0.65rem;
         font-weight: 600;
@@ -587,7 +587,7 @@ h1 {
     }
     .box-color {
         flex: 1;
-        max-width: 52px;
+        max-width: 48px;
         aspect-ratio: auto;
         height: 40px;
     }
@@ -689,7 +689,7 @@ h1 {
         margin-left: calc(90px + 1.25rem);
     }
     .shade-header span {
-        max-width: 52px;
+        max-width: 48px;
         font-size: 0.65rem;
     }
     #palette {
@@ -706,7 +706,7 @@ h1 {
         gap: 8px;
     }
     .box-color {
-        max-width: 52px;
+        max-width: 48px;
         height: 42px;
         border-radius: 8px;
     }
@@ -774,7 +774,7 @@ h1 {
         margin-left: calc(100px + 1.5rem);
     }
     .shade-header span {
-        max-width: 60px;
+        max-width: 52px;
         font-size: 0.7rem;
     }
     #palette {
@@ -791,7 +791,7 @@ h1 {
         gap: 10px;
     }
     .box-color {
-        max-width: 60px;
+        max-width: 52px;
         height: 48px;
         border-radius: 10px;
     }

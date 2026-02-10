@@ -5,7 +5,7 @@ const colorValue = document.getElementById("color_value");
 const colorRows = document.querySelectorAll(".color-row");
 const toast = document.getElementById("toast");
 const npmCopyBtn = document.getElementById("npm-copy");
-const shadeValues = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"];
+const shadeValues = ["25", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950", "975"];
 
 if (!input_theme_base || !colorValue) throw new Error("Input not found");
 
@@ -13,7 +13,7 @@ if (!input_theme_base || !colorValue) throw new Error("Input not found");
 colorRows.forEach(row => {
     const shadesContainer = row.querySelector(".shades");
     if (!shadesContainer) return;
-    
+
     shadeValues.forEach(shade => {
         const box = document.createElement("div");
         box.className = "box-color";
@@ -59,11 +59,11 @@ function handleColorPickerChange() {
 function handleTextInputChange() {
     // @ts-ignore
     let value = colorValue.value.trim();
-    
+
     if (value && !value.startsWith("#")) {
         value = "#" + value;
     }
-    
+
     if (isValidHex(value)) {
         // @ts-ignore
         colorValue.classList.remove("invalid");
@@ -83,11 +83,11 @@ function handleTextInputChange() {
 function handleTextInputBlur() {
     // @ts-ignore
     let value = colorValue.value.trim();
-    
+
     if (!value.startsWith("#") && value) {
         value = "#" + value;
     }
-    
+
     if (isValidHex(value)) {
         const expandedHex = expandHex(value);
         // @ts-ignore
@@ -137,14 +137,14 @@ function expandHex(hex) {
 async function copyNpmInstall() {
     try {
         await navigator.clipboard.writeText("npm install auto-theme-js");
-        
+
         if (npmCopyBtn) {
             npmCopyBtn.classList.add("copied");
             setTimeout(() => {
                 npmCopyBtn.classList.remove("copied");
             }, 2000);
         }
-        
+
         showToast("npm install auto-theme-js");
     } catch (err) {
         console.error("Failed to copy:", err);
@@ -157,21 +157,21 @@ async function copyNpmInstall() {
  */
 function applyThemeToPage(theme) {
     const root = document.documentElement;
-    
+
     const properties = ["primary", "secondary", "tertiary", "accent", "neutral"];
-    
+
     for (const prop of properties) {
         // @ts-ignore
         const shades = theme[prop];
         if (!shades) continue;
-        
+
         for (const shade of shadeValues) {
             if (shades[shade]) {
                 root.style.setProperty(`--color-${prop}-${shade}`, shades[shade]);
             }
         }
     }
-    
+
     // @ts-ignore
     const primary950 = theme.primary?.["950"] || "#0a0a0a";
     // @ts-ignore
@@ -190,7 +190,7 @@ function applyThemeToPage(theme) {
     const primary200 = theme.primary?.["200"] || "#e9d5ff";
     // @ts-ignore
     const primary100 = theme.primary?.["100"] || "#f3e8ff";
-    
+
     // @ts-ignore
     const neutral950 = theme.neutral?.["950"] || "#0a0a0a";
     // @ts-ignore
@@ -212,28 +212,28 @@ function applyThemeToPage(theme) {
     root.style.setProperty("--color-bg-secondary", neutral950);
     root.style.setProperty("--color-bg-tertiary", neutral900);
     root.style.setProperty("--color-bg-elevated", hexToRgba(neutral800, 0.5));
-    
+
     root.style.setProperty("--color-surface", hexToRgba(neutral800, 0.4));
     root.style.setProperty("--color-surface-hover", hexToRgba(neutral700, 0.5));
     root.style.setProperty("--color-border", hexToRgba(neutral600, 0.3));
     root.style.setProperty("--color-border-focus", primary400);
-    
+
     root.style.setProperty("--color-text-primary", neutral50);
     root.style.setProperty("--color-text-secondary", neutral300);
     root.style.setProperty("--color-text-muted", neutral400);
-    
+
     root.style.setProperty("--color-accent", primary400);
     root.style.setProperty("--color-accent-hover", primary300);
     root.style.setProperty("--color-accent-subtle", hexToRgba(primary500, 0.2));
-    
+
     root.style.setProperty(
         "--gradient-title",
         `linear-gradient(135deg, ${primary300} 0%, ${primary500} 50%, ${primary700} 100%)`
     );
-    
+
     root.style.setProperty("--color-neutral-800", neutral800);
     root.style.setProperty("--color-neutral-900", neutral900);
-    
+
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
         themeColorMeta.setAttribute("content", primary950);
@@ -256,8 +256,8 @@ function hexToRgba(hex, alpha) {
 function changeColors() {
     // @ts-ignore
     const input_theme_current_color = input_theme_base.value;
-    
-    const theme = new AutoTheme(input_theme_current_color, "hex", "hex", "50", "950");
+
+    const theme = new AutoTheme(input_theme_current_color, "hex", "hex", "25", "975");
 
     applyThemeToPage(theme);
 
@@ -265,20 +265,20 @@ function changeColors() {
         // @ts-ignore
         const property = row.dataset.property;
         if (!property) return;
-        
+
         const boxes = row.querySelectorAll(".box-color");
-        
+
         boxes.forEach((box, index) => {
             const shade = shadeValues[index];
             // @ts-ignore
             const color = theme[property]?.[shade];
-            
+
             if (color) {
                 // @ts-ignore
                 box.style.background = color;
                 // @ts-ignore
                 box.dataset.color = color;
-                
+
                 const shadeNum = parseInt(shade);
                 if (shadeNum >= 500) {
                     box.classList.add("light-text");
@@ -299,7 +299,7 @@ async function copyColor(box) {
     // @ts-ignore
     const color = box.dataset.color;
     if (!color) return;
-    
+
     try {
         await navigator.clipboard.writeText(color);
         showToast(color);
@@ -313,10 +313,10 @@ async function copyColor(box) {
  */
 function showToast(text) {
     if (!toast) return;
-    
+
     const colorPreview = toast.querySelector(".color-preview");
     const toastText = toast.querySelector(".toast-text");
-    
+
     if (colorPreview) {
         // @ts-ignore
         colorPreview.style.background = text.startsWith("#") ? text : "var(--color-accent)";
@@ -324,9 +324,9 @@ function showToast(text) {
     if (toastText) {
         toastText.textContent = `Copied: ${text}`;
     }
-    
+
     toast.classList.add("show");
-    
+
     setTimeout(() => {
         toast.classList.remove("show");
     }, 2000);
