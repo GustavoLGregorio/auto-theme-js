@@ -52,7 +52,7 @@
             "types": "./dist/types.d.ts"
         }
     },
-    "dependencies": {
+    "devDependencies": {
         "ts-add-js-extension": "^1.6.6"
     }
 }
