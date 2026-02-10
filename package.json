@@ -7,6 +7,7 @@
     "main": "dist/AutoTheme.js",
     "scripts": {
         "build:lin": "clear; tsc; npx ts-add-js-extension --dir=dist",
+        "build:win": "cls & tsc & npx ts-add-js-extension --dir=dist",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
