@@ -1,4 +1,5 @@
-type ColorType = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
+/** Suported CSS color types */
+export type ColorType = "hex" | "hsl" | "rgb" | "oklab" | "oklch";
 type ColorHEX = `#${string}`;
 type ColorRGB = `rgba(${number}, ${number}, ${number}, ${number})`;
 type ColorHSL = `hsla(${number}, ${number}%, ${number}%, ${number})`;
